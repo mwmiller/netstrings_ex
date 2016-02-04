@@ -5,24 +5,24 @@ defmodule Netstrings do
 
     An implementation of djb's [netstrings](http://cr.yp.to/proto/netstrings.txt).
 
-    Please note that the decoder violates spec by accepting leading zeroes in the `len` part.
+    Please note that the decoder violates spec by accepting leading zeros in the `len` part.
     However, the encoder will never generate such leading zeros.
     """
     @doc """
-    encode a netstring
+    Encode a netstring
     """
     @spec encode(String.t) :: {:ok|:error, String.t}
     def encode(str) when is_binary(str), do: {:ok, (str |> byte_size |> Integer.to_string) <> ":" <> str <> ","}
     def encode(_), do:  {:error, "Can only encode binaries"}
 
     @doc """
-    decode netstrings
+    Decode netstrings
 
     The decoder will stop as soon as it encounters an improper or incomplete netstring.
     Upon success, decoded strings will appear in the second element of the tuple as a list.  Any remaining (undecoded)
     part of the string will appear as the third element.
 
-    There are no gaurantees that the remainder is the start of a proper netstring.  Appending more recieved data
+    There are no guarantees that the remainder is the start of a proper netstring.  Appending more received data
     to the remainder may or may not allow it to be decoded.
     """
     @spec decode(String.t) :: {:ok, [String.t], String.t} | {:error, String.t}

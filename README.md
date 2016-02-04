@@ -1,4 +1,4 @@
-# Netstrings
+# Overview
 
 Elixir encoder and decoder for djb's [netstrings](http://cr.yp.to/proto/netstrings.txt)
 
@@ -8,7 +8,7 @@ Elixir encoder and decoder for djb's [netstrings](http://cr.yp.to/proto/netstrin
 # add dependencies in mix.exs
 defp deps do
   [
-    {:netstrings, "~> 0.2"}
+    {:netstrings, "~> 1.0"}
   ]
 end
 

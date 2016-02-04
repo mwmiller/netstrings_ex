@@ -3,7 +3,7 @@ defmodule Netstrings.Mixfile do
 
   def project do
     [app: :netstrings,
-     version: "0.2.0",
+     version: "1.0.0",
      elixir: "~> 1.2",
      name: "Netstrings",
      source_url: "https://github.com/mwmiller/ex_netstrings",
@@ -11,7 +11,9 @@ defmodule Netstrings.Mixfile do
      start_permanent: Mix.env == :prod,
      description: description,
      package: package,
-     deps: deps]
+     deps: deps,
+     docs: [extras: ["README.md"]]
+    ]
   end
 
   def application do

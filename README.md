@@ -8,7 +8,7 @@ Elixir encoder and decoder for djb's [netstrings](http://cr.yp.to/proto/netstrin
 # add dependencies in mix.exs
 defp deps do
   [
-    {:netstrings, "~> 0.1"}
+    {:netstrings, "~> 0.2"}
   ]
 end
 

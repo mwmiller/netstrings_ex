@@ -12,7 +12,7 @@ defmodule Netstrings do
     encode a netstring
     """
     @spec encode(String.t) :: {:ok|:error, String.t}
-    def encode(str) when is_binary(str), do: {:ok, (str |> String.length |> Integer.to_string) <> ":" <> str <> ","}
+    def encode(str) when is_binary(str), do: {:ok, (str |> byte_size |> Integer.to_string) <> ":" <> str <> ","}
     def encode(_), do:  {:error, "Can only encode binaries"}
 
     @doc """
@@ -47,10 +47,9 @@ defmodule Netstrings do
     @spec pull_string(non_neg_integer, list) :: tuple
     defp pull_string(count, []), do: bad_path(count, "")
     defp pull_string(count, [s]) do
-        len = String.length(s)
-        if len >= count and String.at(s, count) == "," do
-          {f,<<_,b::binary>>} = String.split_at(s, count)
-          {f,b}
+        if (binary_part(s,count,1) == ",") do
+          f = binary_part(s, 0, count)
+          {f, String.replace_prefix(s,f<>",","")}
         else
           bad_path(Integer.to_string(count), s)
         end

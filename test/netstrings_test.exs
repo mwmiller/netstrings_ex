@@ -14,19 +14,19 @@ defmodule NetstringsTest do
 
   test "encode" do
     assert encode(0) == {:error, "Can only encode binaries"}, "Can only encode binaries"
-    assert encode("√2") == {:ok, "2:√2,"}, "UTF-8 string including number"
+    assert encode("√2") == {:ok, "4:√2,"}, "UTF-8 string including number"
   end
 
   test "decode" do
     assert decode(0) == {:error, "Can only decode binaries"}, "Can only decode binaries"
     assert decode("0:,0:,") == {:ok, ["", ""], ""}, "Pair of empty strings."
-    assert decode("2:√3,") == {:ok, ["√3"], ""}, "UTF-8 string including number"
+    assert decode("4:√3,") == {:ok, ["√3"], ""}, "UTF-8 string including number"
     assert decode("4:say,,") == {:ok, ["say,"], ""}, "Including a comma"
     assert decode("4:say:,") == {:ok, ["say:"], ""}, "Including a colon"
     assert decode("3:say:,") == {:ok, [], "3:say:,"}, "Improper netstring left undecoded"
     assert decode("2:hi,5:there,3") == {:ok, ["hi", "there"], "3"}, "Incomplete netstring is left as remainder"
     assert decode("2:hi,4:there,3") == {:ok, ["hi"], "4:there,3"}, "Stop as soon as improper is hit"
-    assert decode("2:hi,:") == {:ok, ["hi"], ":"}, "Remaining colon it untouched"
+    assert decode("2:hi,:") == {:ok, ["hi"], ":"}, "Remaining colon is untouched"
   end
 
 end

@@ -8,7 +8,7 @@ Elixir encoder and decoder for djb's [netstrings](http://cr.yp.to/proto/netstrin
 # add dependencies in mix.exs
 defp deps do
   [
-    {:netstrings, "~> 1.0"}
+    {:netstrings, "~> 1.1"}
   ]
 end
 
@@ -28,4 +28,9 @@ iex> Netstrings.decode(0)
 {:error, "Can only decode binaries"}
 iex> Netstrings.decode("12:hello world!,")
 {:ok, ["hello world!"], ""}
+
+iex> {:ok, file} = File.open("net.strings")
+{:ok, #PID<0.121.0>}
+iex> Netstrings.stream(file)
+%Netstrings.Stream{buffer: "", device: #PID<0.121.0>}
 ```

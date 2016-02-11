@@ -47,7 +47,7 @@ defmodule Netstrings do
     @spec pull_string(non_neg_integer, list) :: tuple
     defp pull_string(count, []), do: bad_path(count, "")
     defp pull_string(count, [s]) do
-        if (binary_part(s,count,1) == ",") do
+        if (byte_size(s) > count and binary_part(s,count,1) == ",") do
           f = binary_part(s, 0, count)
           {f, String.replace_prefix(s,f<>",","")}
         else

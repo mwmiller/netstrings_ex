@@ -24,7 +24,7 @@ defmodule NetstringsTest do
     assert decode("4:say,,") == {:ok, ["say,"], ""}, "Including a comma"
     assert decode("4:say:,") == {:ok, ["say:"], ""}, "Including a colon"
     assert decode("3:say:,") == {:ok, [], "3:say:,"}, "Improper netstring left undecoded"
-    assert decode("2:hi,5:there,3") == {:ok, ["hi", "there"], "3"}, "Incomplete netstring is left as remainder"
+    assert decode("2:hi,5:there,3:") == {:ok, ["hi", "there"], "3:"}, "Incomplete netstring is left as remainder"
     assert decode("2:hi,4:there,3") == {:ok, ["hi"], "4:there,3"}, "Stop as soon as improper is hit"
     assert decode("2:hi,:") == {:ok, ["hi"], ":"}, "Remaining colon is untouched"
   end

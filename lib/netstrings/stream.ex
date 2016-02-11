@@ -13,6 +13,7 @@ end
 defmodule Netstrings.Stream do
   @moduledoc """
   Defines an `Netstrings.Stream` struct returned by `Netstrings.stream/1`.
+
   The following fields are public:
     * `device`        - the IO device
     * `buffer`        - the unhandled strings to this point
@@ -46,8 +47,7 @@ defmodule Netstrings.Stream do
       start_fun = fn-> stream end
       next_fun = fn(%{device: device, buffer: buffer} = stream) ->
             {:ok, strings, remainder} = buffer <> IO.binread(device, :all) |> Netstrings.decode
-            %{stream | :buffer => remainder}
-            {strings, stream}
+            {strings, %{stream | :buffer => remainder}}
           end
       Stream.resource(start_fun, next_fun, &(&1)).(acc, fun)
     end

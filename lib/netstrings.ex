@@ -65,8 +65,7 @@ defmodule Netstrings do
     Behaves similarly to an `IO.Stream` with the values marshaled into and out of
     netstring format. The device should be opened in raw format for predictability.
 
-    Please note that while this works, at present, it has very poor error handling and
-    has many untested edges.  Use with caution.
+    Note that netstrings approaching or above 64kib may not be properly handled.
     """
     def stream(device), do: Netstrings.Stream.__build__(device)
 

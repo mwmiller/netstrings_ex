@@ -46,9 +46,12 @@ defmodule Netstrings.Stream do
     def reduce(stream, acc, fun) do
       start_fun = fn-> stream end
       next_fun = fn(%{device: device, buffer: buffer} = stream) ->
-            {:ok, strings, remainder} = buffer <> IO.binread(device, :all) |> Netstrings.decode
-            {strings, %{stream | :buffer => remainder}}
-          end
+                  case IO.binread(device, :all) do
+                      {:error, reason} -> raise Netstrings.StreamError, reason: reason
+                      data             -> {:ok, strings, remainder} =  buffer <> data |> Netstrings.decode
+                                          {strings, %{stream | :buffer => remainder}}
+                  end
+                end
       Stream.resource(start_fun, next_fun, &(&1)).(acc, fun)
     end
 

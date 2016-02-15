@@ -11,9 +11,20 @@ defmodule Netstrings do
     @doc """
     Encode a netstring
     """
-    @spec encode(String.t) :: {:ok|:error, String.t}
-    def encode(str) when is_binary(str), do: {:ok, (str |> byte_size |> Integer.to_string) <> ":" <> str <> ","}
+    @spec encode(String.t) :: String.t | {:error, String.t}
+    def encode(str) when is_binary(str), do: (str |> byte_size |> Integer.to_string) <> ":" <> str <> ","
     def encode(_), do:  {:error, "Can only encode binaries"}
+
+    @doc """
+    Encode a netstring, raise exception on error
+    """
+    @spec encode!(String.t) :: String.t | no_return
+    def encode!(str) do
+      case encode(str) do
+        {:error, e} -> raise(e)
+        s           -> s
+      end
+    end
 
     @doc """
     Decode netstrings
@@ -25,12 +36,26 @@ defmodule Netstrings do
     There are no guarantees that the remainder is the start of a proper netstring.  Appending more received data
     to the remainder may or may not allow it to be decoded.
     """
-    @spec decode(String.t) :: {:ok, [String.t], String.t} | {:error, String.t}
+    @spec decode(String.t) :: {[String.t], String.t} | {:error, String.t}
     def decode(ns) when is_binary(ns), do: recur_decode(ns,[],"") # This extra string will be stripped at output
     def decode(_), do: {:error, "Can only decode binaries"}
 
-    @spec recur_decode(String.t, list, any) :: {:ok, list(String.t), String.t}
-    defp recur_decode(rest, acc, nil), do: {:ok, (acc |> Enum.reverse |> Enum.drop(1)), rest}
+
+    @doc """
+    Decode netstrings, raise exception on error
+
+    Note that the strings must be correct and complete, having any remainder will raise an exception.
+    """
+    @spec decode!(String.t) :: [String.t] | no_return
+    def decode!(str) do
+      case decode(str) do
+        {:error, e} -> raise(e)
+        data        -> data
+      end
+    end
+
+    @spec recur_decode(String.t, list, any) :: {list(String.t), String.t}
+    defp recur_decode(rest, acc, nil), do: {(acc |> Enum.reverse |> Enum.drop(1)), rest}
     defp recur_decode(ns, acc, prev) do
       {this_one, rest} = if String.contains?(ns,":") do
         [i|r] = String.split(ns, ":", parts: 2)

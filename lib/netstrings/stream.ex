@@ -38,7 +38,7 @@ defmodule Netstrings.Stream do
       end
     end
 
-    defp encoded_write({:ok, s}, d), do:  IO.binwrite(d,s)
+    defp encoded_write(s, d), do:  IO.binwrite(d,s)
 
   end
 
@@ -49,7 +49,7 @@ defmodule Netstrings.Stream do
                   case IO.binread(device, 65536) do
                       :eof             -> {:halt, stream}
                       {:error, reason} -> raise Netstrings.StreamError, reason: reason
-                      data             -> {:ok, strings, remainder} =  buffer <> data |> Netstrings.decode
+                      data             -> {strings, remainder} =  buffer <> data |> Netstrings.decode
                                           {strings, %{stream | :buffer => remainder}}
                   end
                 end

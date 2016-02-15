@@ -18,6 +18,7 @@ defmodule NetstringsTest do
   end
 
   test "encode!" do
+    assert_raise RuntimeError,  "Can only encode binaries", fn -> encode!(0) end
     assert encode!("√2") == "4:√2,", "UTF-8 string including number"
   end
 
@@ -34,7 +35,9 @@ defmodule NetstringsTest do
   end
 
   test "decode!" do
+    assert_raise RuntimeError,  "Can only decode binaries", fn -> decode!(0) end
     assert decode!("0:,0:,") == {["", ""], ""}, "Pair of empty strings."
+    assert decode!("2:hi,5:there,3:") == {["hi", "there"], "3:"}, "Incomplete netstring is left as remainder"
   end
 
   test "exceptional round trip" do

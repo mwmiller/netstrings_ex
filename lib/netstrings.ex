@@ -46,7 +46,7 @@ defmodule Netstrings do
 
     Note that the strings must be correct and complete, having any remainder will raise an exception.
     """
-    @spec decode!(String.t) :: [String.t] | no_return
+    @spec decode!(String.t) :: {[String.t], String.t} | no_return
     def decode!(str) do
       case decode(str) do
         {:error, e} -> raise(e)

@@ -29,4 +29,13 @@ defmodule NetstringsTest do
     assert decode("2:hi,:") == {:ok, ["hi"], ":"}, "Remaining colon is untouched"
   end
 
+  test "round trips" do
+    ok_encode = fn({:ok, r}) -> r end
+    ok_decode = fn({:ok, [r|_],""}) -> r end
+
+    assert encode("Scheiße") |> ok_encode.() |> decode |> ok_decode.() == "Scheiße", "Garbage in/garbage out"
+    assert decode("12:2+2=shopping,") |> ok_decode.() |> encode |> ok_encode.() == "12:2+2=shopping,", "Math is hard"
+
+  end
+
 end

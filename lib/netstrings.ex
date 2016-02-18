@@ -59,7 +59,7 @@ defmodule Netstrings do
     defp recur_decode(ns, acc, prev) do
       {this_one, rest} = if String.contains?(ns,":") do
         [i|r] = String.split(ns, ":", parts: 2)
-        {this_one, rest} = case i |> Integer.parse do
+        case i |> Integer.parse do
           {n, ""} -> pull_string(n, r)
           _       -> bad_path(i,r)
         end

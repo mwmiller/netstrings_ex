@@ -3,10 +3,10 @@ defmodule Netstrings.Mixfile do
 
   def project do
     [app: :netstrings,
-     version: "2.0.0",
+     version: "2.0.1",
      elixir: "~> 1.2",
      name: "Netstrings",
-     source_url: "https://github.com/mwmiller/ex_netstrings",
+     source_url: "https://github.com/mwmiller/netstrings_ex",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
      description: description,
@@ -39,7 +39,7 @@ defmodule Netstrings.Mixfile do
      files: ["lib", "mix.exs", "README*", "LICENSE*", ],
      maintainers: ["Matt Miller"],
      licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/mwmiller/ex_netstrings",}
+     links: %{"GitHub" => "https://github.com/mwmiller/netstrings_ex",}
     ]
   end
 

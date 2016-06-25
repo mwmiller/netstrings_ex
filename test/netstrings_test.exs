@@ -1,5 +1,5 @@
 defmodule NetstringsTest do
-  use PowerAssert
+  use ExUnit.Case
   import Netstrings
   doctest Netstrings
 

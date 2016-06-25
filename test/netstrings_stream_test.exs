@@ -1,5 +1,5 @@
 defmodule NetstringsStreamTest do
-  use PowerAssert
+  use ExUnit.Case
   doctest Netstrings.Stream
 
 

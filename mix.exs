@@ -3,7 +3,7 @@ defmodule Netstrings.Mixfile do
 
   def project do
     [app: :netstrings,
-     version: "2.0.3",
+     version: "2.0.4",
      elixir: "~> 1.3",
      name: "Netstrings",
      source_url: "https://github.com/mwmiller/netstrings_ex",
@@ -23,7 +23,7 @@ defmodule Netstrings.Mixfile do
   defp deps do
     [
       {:earmark, "~> 1.0", only: :dev},
-      {:ex_doc, "~> 0.13", only: :dev},
+      {:ex_doc, "~> 0.14", only: :dev},
       {:temp, "~> 0.4", only: :test},
     ]
   end

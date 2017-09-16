@@ -37,9 +37,8 @@ defmodule Netstrings do
     to the remainder may or may not allow it to be decoded.
     """
     @spec decode(String.t) :: {[String.t], String.t} | {:error, String.t}
-    def decode(ns) when is_binary(ns), do: recur_decode(ns,[],"") # This extra string will be stripped at output
+    def decode(ns) when is_binary(ns), do: recur_decode(ns, [], "") # This extra string will be stripped at output
     def decode(_), do: {:error, "Can only decode binaries"}
-
 
     @doc """
     Decode netstrings, raise exception on error
@@ -57,11 +56,11 @@ defmodule Netstrings do
     @spec recur_decode(String.t, list, any) :: {list(String.t), String.t}
     defp recur_decode(rest, acc, nil), do: {(acc |> Enum.reverse |> Enum.drop(1)), rest}
     defp recur_decode(ns, acc, prev) do
-      {this_one, rest} = if String.contains?(ns,":") do
+      {this_one, rest} = if String.contains?(ns, ":") do
         [i|r] = String.split(ns, ":", parts: 2)
         case i |> Integer.parse do
           {n, ""} -> pull_string(n, r)
-          _       -> bad_path(i,r)
+          _       -> bad_path(i, r)
         end
       else
         {nil, ns}
@@ -72,16 +71,16 @@ defmodule Netstrings do
     @spec pull_string(non_neg_integer, list) :: tuple
     defp pull_string(count, []), do: bad_path(count, "")
     defp pull_string(count, [s]) do
-        if (byte_size(s) > count and binary_part(s,count,1) == ",") do
+        if (byte_size(s) > count and binary_part(s, count, 1) == ",") do
           f = binary_part(s, 0, count)
-          {f, String.replace_prefix(s,f<>",","")}
+          {f, String.replace_prefix(s, f <> ",", "")}
         else
           bad_path(Integer.to_string(count), s)
         end
     end
 
     @spec bad_path(String.t|non_neg_integer, String.t|list) :: {nil, String.t}
-    defp bad_path(n,s), do: {nil, Enum.join([n,":",s], "")}
+    defp bad_path(n, s), do: {nil, Enum.join([n, ":", s], "")}
 
     @spec stream(atom | pid) :: Enumerable.t
     @doc """

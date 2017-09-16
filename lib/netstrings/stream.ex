@@ -33,20 +33,20 @@ defmodule Netstrings.Stream do
 
     defp into(stream, device) do
       fn
-        :ok, {:cont, x} -> Netstrings.encode(x) |> encoded_write(device)
+        :ok, {:cont, x} -> x |> Netstrings.encode |> encoded_write(device)
         :ok, _          -> stream
       end
     end
 
-    defp encoded_write(s, d), do:  IO.binwrite(d,s)
+    defp encoded_write(s, d), do:  IO.binwrite(d, s)
 
   end
 
   defimpl Enumerable do
     def reduce(stream, acc, fun) do
-      start_fun = fn-> stream end
+      start_fun = fn -> stream end
       next_fun = fn(%{device: device, buffer: buffer} = stream) ->
-                  case IO.binread(device, 65536) do
+                  case IO.binread(device, 65_536) do
                       :eof             -> {:halt, stream}
                       {:error, reason} -> raise Netstrings.StreamError, reason: reason
                       data             -> {strings, remainder} =  buffer <> data |> Netstrings.decode

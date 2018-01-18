@@ -4,7 +4,7 @@ defmodule Netstrings.StreamError do
   defexception [:reason, :message]
 
   def exception(opts) do
-    reason    = opts[:reason]
+    reason = opts[:reason]
     formatted = IO.iodata_to_binary(:file.format_error(reason))
     %Netstrings.StreamError{message: "error during streaming: #{formatted}", reason: reason}
   end
@@ -33,27 +33,33 @@ defmodule Netstrings.Stream do
 
     defp into(stream, device) do
       fn
-        :ok, {:cont, x} -> x |> Netstrings.encode |> encoded_write(device)
-        :ok, _          -> stream
+        :ok, {:cont, x} -> x |> Netstrings.encode() |> encoded_write(device)
+        :ok, _ -> stream
       end
     end
 
-    defp encoded_write(s, d), do:  IO.binwrite(d, s)
-
+    defp encoded_write(s, d), do: IO.binwrite(d, s)
   end
 
   defimpl Enumerable do
     def reduce(stream, acc, fun) do
       start_fun = fn -> stream end
-      next_fun = fn(%{device: device, buffer: buffer} = stream) ->
-                  case IO.binread(device, 65_536) do
-                      :eof             -> {:halt, stream}
-                      {:error, reason} -> raise Netstrings.StreamError, reason: reason
-                      data             -> {strings, remainder} =  buffer <> data |> Netstrings.decode
-                                          {strings, %{stream | :buffer => remainder}}
-                  end
-                end
-      Stream.resource(start_fun, next_fun, &(&1)).(acc, fun)
+
+      next_fun = fn %{device: device, buffer: buffer} = stream ->
+        case IO.binread(device, 65_536) do
+          :eof ->
+            {:halt, stream}
+
+          {:error, reason} ->
+            raise Netstrings.StreamError, reason: reason
+
+          data ->
+            {strings, remainder} = (buffer <> data) |> Netstrings.decode()
+            {strings, %{stream | :buffer => remainder}}
+        end
+      end
+
+      Stream.resource(start_fun, next_fun, & &1).(acc, fun)
     end
 
     def count(_stream) do

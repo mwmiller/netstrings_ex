@@ -2,17 +2,18 @@ defmodule Netstrings.Mixfile do
   use Mix.Project
 
   def project do
-    [app: :netstrings,
-     version: "2.0.6",
-     elixir: "~> 1.4",
-     name: "Netstrings",
-     source_url: "https://github.com/mwmiller/netstrings_ex",
-     build_embedded: Mix.env == :prod,
-     start_permanent: Mix.env == :prod,
-     description: description(),
-     package: package(),
-     deps: deps(),
-     docs: [extras: ["README.md"]]
+    [
+      app: :netstrings,
+      version: "2.0.6",
+      elixir: "~> 1.4",
+      name: "Netstrings",
+      source_url: "https://github.com/mwmiller/netstrings_ex",
+      build_embedded: Mix.env() == :prod,
+      start_permanent: Mix.env() == :prod,
+      description: description(),
+      package: package(),
+      deps: deps(),
+      docs: [extras: ["README.md"]]
     ]
   end
 
@@ -25,9 +26,10 @@ defmodule Netstrings.Mixfile do
       {:earmark, "~> 1.0", only: :dev},
       {:ex_doc, "~> 0.14", only: :dev},
       {:temp, "~> 0.4", only: :test},
-      {:credo, "~> 0.8", only: [:dev, :test]},
+      {:credo, "~> 0.8", only: [:dev, :test]}
     ]
   end
+
   defp description do
     """
     Netstrings implementaton
@@ -36,11 +38,10 @@ defmodule Netstrings.Mixfile do
 
   defp package do
     [
-     files: ["lib", "mix.exs", "README*", "LICENSE*", ],
-     maintainers: ["Matt Miller"],
-     licenses: ["MIT"],
-     links: %{"GitHub" => "https://github.com/mwmiller/netstrings_ex",}
+      files: ["lib", "mix.exs", "README*", "LICENSE*"],
+      maintainers: ["Matt Miller"],
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/mwmiller/netstrings_ex"}
     ]
   end
-
 end

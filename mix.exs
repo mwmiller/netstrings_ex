@@ -23,7 +23,6 @@ defmodule Netstrings.Mixfile do
 
   defp deps do
     [
-      {:earmark, "~> 1.4", only: :dev},
       {:ex_doc, "~> 0.23", only: :dev},
       {:temp, "~> 0.4", only: :test},
     ]

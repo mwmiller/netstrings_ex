@@ -4,7 +4,7 @@ defmodule Netstrings.Mixfile do
   def project do
     [
       app: :netstrings,
-      version: "2.0.7",
+      version: "2.0.8",
       elixir: "~> 1.7",
       name: "Netstrings",
       source_url: "https://github.com/mwmiller/netstrings_ex",
